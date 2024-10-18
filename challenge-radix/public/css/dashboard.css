@@ -1,0 +1,271 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    font-family: "Poppins";
+}
+
+body {
+
+    display: flex;
+    margin: 0;
+    padding: 0;
+
+    font-family: "Poppins", sans-serif;
+    font-style: normal;
+
+
+    width: 100vw;
+    height: 100vh;
+
+}
+
+/* -------------------------MENU LATERAL------------------------- */
+
+h1{
+    color: #000000;
+    margin: 6px;
+}
+
+.menu-lateral a{
+    text-decoration: none;
+    width: 90%;
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.menu-lateral {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 16.3%;
+    background-color: #F1F2F7;
+
+    margin-right: 10px;
+    box-shadow: 5px 0px 15px rgba(7, 6, 6, 0.2);
+
+}
+
+
+.menu-lateral div{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 5%;
+    width: 100%;
+
+}
+
+.btn-dashboard{
+    background-color: #6b6b6b20; 
+    color: #000000;
+    font-weight: 600;
+    cursor: pointer;
+    width: 95%; 
+    box-sizing: border-box; 
+}
+
+
+.menu-lateral button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+
+    border: none;
+    border-radius: 5px;
+    font-size: 1.02rem;
+    
+    box-sizing: border-box;
+    width: 100%;
+    overflow: hidden;
+}
+
+.menu-lateral button:hover {
+    background-color: #6b6b6b20; 
+    color: #000000;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%; 
+    box-sizing: border-box; 
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.14);
+}
+
+.menu-lateral img.icon {
+    width: 25px;
+    height: 25px;
+}
+
+.dashboard{
+
+    width: 95%;
+    height: 95%;
+}
+
+.kpis{
+    margin: 2%;
+    width: 98%;
+    height: 25%;
+    display: flex;
+    gap: 2%;
+    margin-right: 2%;
+}
+
+.kpi1{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 0,2px solid #454545;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    width: 50%;
+    height: 80%;
+}
+
+h4{
+    color: red;
+}
+
+span{
+    font-size: xx-large;
+}
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%;
+    background-color: rgb(0, 0, 0); 
+    background-color: rgba(0, 0, 0, 0.4); 
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%; /* Largura do modal */
+    height: auto;
+    border-radius: 15px;
+}
+
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+.close2 {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close2:hover,
+.close2:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.kpi2{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 0,2px solid #454545;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    width: 50%;
+    height: 80%;
+}
+
+
+.kpi3{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 0,2px solid #454545;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    width: 50%;
+    height: 80%;
+}
+
+.kpi4{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 2%;
+    border: 0,2px solid #454545;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    width: 50%;
+    height: 80%;
+}
+
+
+#equipamentoSelect {
+    width: 250px;
+    padding: 2px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+#equipamentoSelect:hover {
+    background-color: #e0e0e0;
+}
+
+#equipamentoSelect:focus {
+    border-color: #ff0000;
+    outline: none;
+}
+
+.select-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #f3f3f3;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.select-container label {
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+
+.grafico{
+    margin-top: -2%;
+    margin-left: 2%;
+    border: 0,2px solid #454545;
+    width: 90%;
+    height: 60%;
+    border-radius: 15px;
+    padding: 2%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Equipamento</title>
+    <link rel="stylesheet" href="css/equipamento.css">
+</head>
+
+<body>
+    <section class="menu-lateral">
+        <div class="identificacao-empresa">
+            <h1>Bem-vindo(a) <span id="nome-usuario"></span></h1>
+        </div>
+
+        <div>
+            <b>
+                <p>Menu</p>
+            </b>
+            <a href="dashboard.html"><button class="btn-dashboard"><img src="./icones/dash.svg" alt="dashboard icon"
+                        class=".dashboard-icon"> Dashboard </button></a>
+            <a href="equipamento.html"><button class="btn-equipamento"> <img src="./icones/equipamentos.svg" alt="equipamento icon"
+                        class="icon">Equipamento</button></a>
+
+            <a href="recomendacoes.html"><button class="btn-recomendacoes"><img src="./icones/recomendacoes.png"
+                        alt="recomendacoes icon" class="icon"> Recomendações</button></a>
+
+
+
+            <a href="login.html"><button class="btn-sair"><img
+                        src="./icones/sair.png" alt="exit icon" class="icon"> Sair</button></a>
+        </div>
+
+    </section>
+
+    <div class="container">
+        <h2>Adicionar Novo Equipamento</h2>
+        <form id="equipamentoForm">
+            <div class="form-group">
+                <label for="equipamentoServer">Tipo de Equipamento:</label>
+                <input type="text" id="equipamentoServer" name="equipamentoServer" placeholder="Digite o tipo de equipamento" required>
+            </div>
+            <button class="button-adicionar" type="submit">Adicionar</button>
+        </form>
+        <div id="mensagem" class="mensagem"></div>
+    </div>
+
+    <div class="listaEquipamentos"> 
+        <h1> Lista de Equipamentos </h1>
+        <span id="lista">
+        </span>
+        
+    </div>
+
+    <script>
+
+        
+ 
+        const nomeUsuario = sessionStorage.getItem('NOME_USUARIO');
+        document.getElementById('nome-usuario').textContent = nomeUsuario;
+
+        document.getElementById('equipamentoForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const tipoEquipamento = document.getElementById('equipamentoServer').value;
+    
+            fetch('equipamento/adicionarEquipamento', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ equipamentoServer: tipoEquipamento })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro na requisição: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('mensagem').textContent = 'Erro ao adicionar equipamento: ' + data.error;
+                    document.getElementById('mensagem').style.color = 'red';
+                } else {
+                    document.getElementById('mensagem').textContent = 'Equipamento adicionado com sucesso!';
+                    document.getElementById('mensagem').style.color = 'green';
+                    document.getElementById('equipamentoForm').reset();
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao enviar o formulário:', error);
+                document.getElementById('mensagem').textContent = 'Erro ao adicionar equipamento. Verifique o console para mais detalhes.';
+                document.getElementById('mensagem').style.color = 'red';
+            });
+        });
+
+        fetch('/equipamento/listarEquipamentos')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erro ao buscar dados: ' + response.status);
+        }
+        return response.json();
+    })
+    .then(data => {
+        const resultado = document.getElementById('lista');
+        resultado.innerHTML = '';
+
+        if (Array.isArray(data) && data.length > 0) {
+            data.forEach(equipamento => {
+                const item = document.createElement('div');
+                item.textContent = `ID: ${equipamento.equipmentId} Equipamento: ${equipamento.tipoEquipamento}`;
+                resultado.appendChild(item);
+            });
+        } else {
+            resultado.textContent = 'Nenhum equipamento encontrado.';
+        }
+    })
+    .catch(error => {
+        console.error("Erro ao buscar dados:", error);
+        document.getElementById('mensagem').textContent = 'Erro ao listar equipamentos.';
+        document.getElementById('mensagem').style.color = 'red';
+    });
+
+    </script>
+
+
+    
+</body>
+
+</html>

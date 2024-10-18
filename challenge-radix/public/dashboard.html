@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="assets/logo_datatech_-_roxa_escuro.png" type="image/x-icon">
+    <link rel="stylesheet" href="./css/dashboard.css">
+
+
+    <title>Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+    <section class="menu-lateral">
+        <div class="identificacao-empresa">
+            <h1>Bem-vindo(a) <span id="nome-usuario"></span></h1>
+        </div>
+
+        <div>
+            <b>
+                <p>Menu</p>
+            </b>
+            <a href="dash"><button class="btn-dashboard"><img src="./icones/dash.svg" alt="dashboard icon"
+                        class=".dashboard-icon"> Dashboard </button></a>
+            <a href="equipamento.html"><button class="btn-equipamento"> <img src="./icones/equipamentos.svg" alt="equipamento icon"
+                        class="icon">Equipamento</button></a>
+
+            <a href="recomendacoes.html"><button class="btn-recomendacoes"><img src="./icones/recomendacoes.png"
+                        alt="recomendacoes icon" class="icon"> Recomendações</button></a>
+
+
+
+            <a href="login.html"><button onclick="limparSessao()" class="btn-sair"><img
+                        src="./icones/sair.png" alt="exit icon" class="icon"> Sair</button></a>
+        </div>
+
+    </section>
+
+    <section class="dashboard">
+
+        <div class="titulo-dash">
+            <h2 style="margin-left: 2%;"> Monitoramento dos Equipamentos</h2>
+        </div>
+
+        <div class="kpis">
+            <div class="kpi1"  id="kpi1" style="cursor: pointer;">
+                <h4>QUANTIDADE ACIMA DA TEMPERATURA IDEAL</h4>
+                <span id="qtdLeituraAcima50"> </span>
+            </div>
+
+            
+            <div id="modalEquipamentosAcima50" class="modal" style="display:none;"> 
+                <div class="modal-content">
+                    <span class="close" style="cursor: pointer;">&times;</span>
+                    <center><h2>Leituras Acima da Temperatura Ideal</h2></center>
+                    <table style="padding-left: 10%;" id="tabelaEquipamentosAcima50">
+                        <thead>
+                            <tr>
+                                <th>Tipo de Equipamento</th>
+                                <th>Temperatura ºC</th>
+                                <th>Hora da Leitura</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div id="kpi2" class="kpi2" style="cursor: pointer;">
+                <h4>QUANTIDADE ABAIXO TEMPERATURA IDEAL</h4>
+                <span id="qtdLeituraAbaixo20"> </span>
+            </div>
+
+            <div id="modalEquipamentosAbaixo20" class="modal" style="display:none;"> 
+                <div class="modal-content">
+                    <span class="close2" style="cursor: pointer; align-items: end;">&times;</span>
+                    <center><h2>Leituras Abaixo da Temperatura Ideal</h2></center>
+                    <table style="padding-left: 10%;" id="tabelaEquipamentosAbaixo20">
+                        <thead>
+                            <tr>
+                                <th>Tipo de Equipamento</th>
+                                <th>Temperatura ºC</th>
+                                <th>Hora da Leitura</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="kpi3">
+                <h4>MAIOR TEMPERATURA</h4>
+                <span id="maiorTemperaturaEquipamento" style="font-size: 20px;"> </span>
+                <span id="temperaturaMaior"style="color: red;"> </span>
+            </div>
+
+            <div class="kpi4">
+                <h4>MENOR TEMPERATURA</h4>
+                <span id="menorTemperaturaEquipamento" style="font-size: 20px;"> </span>
+                <span id="temperaturaMenor" style="color: blue;"> </span>
+            </div>
+        </div>
+
+        <div class="grafico">
+            <div>
+                <label for="equipamentoSelect">Selecione o Equipamento:</label>
+                <select id="equipamentoSelect">
+                    <option value="1">Tanque de armazenamento</option>
+                    <option value="2">Gerador</option>
+                </select>
+            </div>
+            <canvas id="graficoLeituras" width="840" height="280"></canvas>
+            </div>
+        </div>
+
+    
+    </section>
+</body>
+
+</html>
+<script>
+    document.getElementById('kpi1').addEventListener('click', function () {
+    document.getElementById('modalEquipamentosAcima50').style.display = 'block'; 
+    });
+
+    document.querySelector('.close').addEventListener('click', function () {
+    document.getElementById('modalEquipamentosAcima50').style.display = 'none'; 
+    });
+
+    window.onclick = function (event) {
+        if (event.target == document.getElementById('modalEquipamentosAcima50')) {
+            document.getElementById('modalEquipamentosAcima50').style.display = 'none';
+        }
+    };
+
+    document.getElementById('kpi2').addEventListener('click', function () {
+    document.getElementById('modalEquipamentosAbaixo20').style.display = 'block'; 
+    });
+
+    
+    document.querySelector('.close2').addEventListener('click', function () {
+        document.getElementById('modalEquipamentosAbaixo20').style.display = 'none'; 
+    });
+
+    window.onclick = function (event) {
+        if (event.target == document.getElementById('modalEquipamentosAbaixo20')) {
+            document.getElementById('modalEquipamentosAbaixo20').style.display = 'none';
+        }
+    };
+</script>
+ <script>
+        const nomeUsuario = sessionStorage.getItem('NOME_USUARIO');
+        document.getElementById('nome-usuario').textContent = nomeUsuario;
+ </script>
+ <script>
+    fetch('/medida/leituraAcimaDe50Graus')
+        .then(response => response.json())
+        .then(data => {
+            console.log("Dados recebidos:", data.total);
+            const resultado = document.getElementById('qtdLeituraAcima50');
+            resultado.textContent = `${data.total}`;
+        })
+        .catch(error => {
+            console.error("Erro ao buscar dados:", error);
+        });
+
+    fetch('/medida/leituraAbaixoDe20Graus') 
+        .then(response => response.json())
+        .then(data => {
+            console.log("Dados recebidos:", data.total);
+            const resultado = document.getElementById('qtdLeituraAbaixo20');
+            resultado.textContent = `${data.total}`;
+        })
+        .catch(error => {
+            console.error("Erro ao buscar dados:", error);
+        }); 
+
+    fetch('/medida/equipamentoMaiorTemperatura')
+    .then(response => response.json())
+    .then(data => {
+        console.log("Equipamento com maior temperatura:", data);
+        const resultado = document.getElementById('maiorTemperaturaEquipamento');
+        resultado.textContent = `${data.nome_equipamento}`; 
+        const resultadoT = document.getElementById('temperaturaMaior');
+        resultadoT.textContent = `${data.maior_temperatura}°C`;  
+    })
+    .catch(error => {
+        console.error("Erro ao buscar dados:", error);
+    });
+
+    fetch('/medida/equipamentoMenorTemperatura')
+    .then(response => response.json())
+    .then(data => {
+        console.log("Equipamento com menor temperatura:", data);
+        const resultado = document.getElementById('menorTemperaturaEquipamento');
+        resultado.textContent = `${data.nome_equipamento}`; 
+        const resultadoT = document.getElementById('temperaturaMenor');
+        resultadoT.textContent = `${data.menor_temperatura}°C`;  
+    })
+    .catch(error => {
+        console.error("Erro ao buscar dados:", error);
+    });
+
+
+  document.getElementById('equipamentoSelect').addEventListener('change', function () {
+            const equipmentId = this.value;
+            fetchUltimasLeituras(equipmentId);
+        });
+
+        function fetchUltimasLeituras(equipmentId) {
+        fetch(`/medida/ultimasLeituras/${equipmentId}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log("Dados recebidos da hora grafico:", data); 
+                const labels = data.map(item => new Date(item.datahora).toLocaleTimeString());
+                const valores = data.map(item => item.valor);
+                atualizarGrafico(labels.reverse(), valores.reverse());
+            })
+            .catch(error => console.error('Erro ao buscar as últimas leituras:', error));
+}
+        let graficoLeituras = new Chart(document.getElementById('graficoLeituras'), {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Leituras de Temperatura',
+                    data: [],
+                    backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                    borderColor: 'rgba(255, 0, 0, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        function atualizarGrafico(labels, valores) {
+            graficoLeituras.data.labels = labels;
+            graficoLeituras.data.datasets[0].data = valores;
+            graficoLeituras.update();
+        }
+
+        fetchUltimasLeituras(1);
+</script>
+</body>
+
+<script>
+    document.getElementById('kpi1').addEventListener('click', function () {
+    buscarEquipamentosAcima50(); 
+    document.getElementById('modalEquipamentosAcima50').style.display = 'block'; 
+});
+
+    document.getElementById('kpi2').addEventListener('click', function () {
+    buscarEquipamentosAbaixo20(); 
+    document.getElementById('modalEquipamentosAbaixo20').style.display = 'block'; 
+});
+
+function buscarEquipamentosAcima50() {
+    fetch('medida/equipamentosAcima50') 
+        .then(resposta => {
+            if (!resposta.ok) {
+                throw new Error('Erro na resposta da rede');
+            }
+            return resposta.json();
+        })
+        .then(dados => {
+            console.log("Dados dos equipamentos:", dados);
+            const tbody = document.querySelector('#tabelaEquipamentosAcima50 tbody');
+            tbody.innerHTML = ''; 
+            if (dados.length === 0) {
+                const linha = document.createElement('tr');
+                linha.innerHTML = `<td colspan="3">Nenhum equipamento acima de 20 graus.</td>`;
+                tbody.appendChild(linha);
+            } else {
+                dados.forEach(equipamento => {
+                    const linha = document.createElement('tr');
+                    linha.innerHTML = `
+                        <td>${equipamento.tipoEquipamento}</td>
+                        <td>${equipamento.valor}</td>
+                        <td>${equipamento.datahora}</td>
+                    `;
+                    tbody.appendChild(linha);
+                });
+            }
+        })
+        .catch(erro => {
+            console.error('Erro ao buscar dados dos equipamentos:', erro);
+        });
+}
+
+
+function buscarEquipamentosAbaixo20() {
+    fetch('medida/equipamentosAbaixo20') 
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro na resposta da rede');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Dados dos equipamentos:", data); 
+            const tbody = document.querySelector('#tabelaEquipamentosAbaixo20 tbody');
+            tbody.innerHTML = ''; 
+            if (data.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="3">Nenhum equipamento abaixo de 20 graus.</td>`;
+                tbody.appendChild(row);
+            } else {
+                data.forEach(equipamento => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${equipamento.tipoEquipamento}</td>
+                        <td>${equipamento.valor}</td>
+                        <td>${equipamento.datahora}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao buscar dados dos equipamentos:', error);
+        });
+}
+
+</script>
+</html>

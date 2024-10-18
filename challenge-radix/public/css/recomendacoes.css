@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    font-family: "Poppins";
+}
+
+
+.menu-lateral a{
+    text-decoration: none;
+    width: 90%;
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.menu-lateral {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 16.3%;
+    background-color: #F1F2F7;
+
+    margin-right: 10px;
+    box-shadow: 5px 0px 15px rgba(7, 6, 6, 0.2);
+
+}
+
+
+.menu-lateral div{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 5%;
+    width: 100%;
+
+}
+
+.btn-recomendacoes{
+    background-color: #6b6b6b20; 
+    color: #000000;
+    font-weight: 600;
+    cursor: pointer;
+    width: 95%; 
+    box-sizing: border-box; 
+}
+
+
+.menu-lateral button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+
+    border: none;
+    border-radius: 5px;
+    font-size: 1.02rem;
+    
+    box-sizing: border-box;
+    width: 100%;
+    overflow: hidden;
+}
+
+.menu-lateral button:hover {
+    background-color: #6b6b6b20; 
+    color: #000000;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%; 
+    box-sizing: border-box; 
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.14);
+}
+
+.menu-lateral img.icon {
+    width: 25px;
+    height: 25px;
+}
+
+body {
+
+    display: flex;
+    margin: 0;
+    padding: 0;
+
+    font-family: "Poppins", sans-serif;
+    font-style: normal;
+
+
+    width: 100vw;
+    height: 100vh;
+
+}
