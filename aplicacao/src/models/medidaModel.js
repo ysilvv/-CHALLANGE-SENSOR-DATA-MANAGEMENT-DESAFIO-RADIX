@@ -5,7 +5,7 @@ function qtdEquipamentosAcimaDe50Graus() {
         select count(distinct e.tipoEquipamento) as total_acima_de_20
         from leitura l
         join equipamento e on l.fkEquipamento = e.equipmentId
-        where l.valor > 50;
+        where l.valor > 50 and l.dataHora >= now() - interval 7 day;
     `;
     return database.executar(instrucaoSql)
         .then(resultado => {
@@ -18,7 +18,7 @@ function qtdEquipamentosAbaixoDe20Graus() {
         select count(distinct e.tipoequipamento) as total_abaixo_de_20
         from leitura l
         join equipamento e on l.fkequipamento = e.equipmentid
-        where l.valor < 20;
+        where l.valor < 20 and l.dataHora >= now() - interval 7 day;
     `;
     return database.executar(instrucaoSql)
         .then(resultado => {
@@ -31,6 +31,7 @@ function equipamentoComMaiorTemperatura() {
         select e.tipoequipamento as nome_equipamento, max(l.valor) as maior_temperatura
         from leitura l
         join equipamento e on l.fkequipamento = e.equipmentid
+        where l.datahora >= now() - interval 7 day
         group by e.tipoequipamento
         order by maior_temperatura desc
         limit 1;
@@ -44,6 +45,7 @@ function equipamentoComMenorTemperatura() {
         select e.tipoequipamento as nome_equipamento, min(l.valor) as menor_temperatura
         from leitura l
         join equipamento e on l.fkequipamento = e.equipmentid
+        where l.datahora >= now() - interval 7 day
         group by e.tipoequipamento
         order by menor_temperatura asc
         limit 1;
@@ -55,7 +57,7 @@ function equipamentoComMenorTemperatura() {
 function ultimasLeiturasEquipamento(equipmentId) {
     const instrucaoSql = `
         select datahora, valor
-        from leitura
+        from leitura l
         where fkequipamento = ${equipmentId}
         order by datahora desc
         limit 10;
@@ -68,15 +70,14 @@ function buscarEquipamentosAcimaDe50Graus() {
     const instrucaoSql = `
         select e.tipoEquipamento, l.valor, 
             concat(
-                right(year(l.datahora), 2), '-', 
-                lpad(month(l.datahora), 2, '0'), '-', 
-                lpad(day(l.datahora), 2, '0'), ' ', 
+                lpad(day(l.datahora), 2, '0'), '/', 
+                lpad(month(l.datahora), 2, '0'), '  ', 
                 lpad(hour(l.datahora), 2, '0'), ':', 
                 lpad(minute(l.datahora), 2, '0')
             ) as datahora
         from leitura l
         join equipamento e on l.fkequipamento = e.equipmentid
-        where l.valor > 50
+        where l.valor > 50 and  l.datahora >= now() - interval 7 day
         order by l.datahora desc;
         `;
     return database.executar(instrucaoSql)
@@ -90,15 +91,14 @@ function buscarEquipamentosAbaixoDe20Graus() {
     const instrucaoSql = `
       select e.tipoEquipamento, l.valor, 
             concat(
-                right(year(l.datahora), 2), '-', 
-                lpad(month(l.datahora), 2, '0'), '-', 
-                lpad(day(l.datahora), 2, '0'), ' ', 
+                lpad(day(l.datahora), 2, '0'), '/', 
+                lpad(month(l.datahora), 2, '0'), '  ', 
                 lpad(hour(l.datahora), 2, '0'), ':', 
                 lpad(minute(l.datahora), 2, '0')
             ) as datahora
         from leitura l
         join equipamento e on l.fkequipamento = e.equipmentid
-        where l.valor < 20
+        where l.valor < 20 and  l.datahora >= now() - interval 7 day
         order by l.datahora desc;
         `;
     return database.executar(instrucaoSql)
