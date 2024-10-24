@@ -6,7 +6,7 @@ Caminho: (Public/src/database/script-tabelas.sql)
 ## 2º Configurar as credenciais do banco de dados no .env
 ALTERAR: DB_USER='SUAS_CREDENCIAIS' DB_PASSWORD='SUAS_CREDENCIAIS'
 
-## 3º Abra o terminal e instale as pendencias do projeto
+## 3º Abra o terminal e instale as dependências listadas no arquivo package.json
 npm install 
 
 ## 4º Pronto! Agora pode startar e ser feliz :D
